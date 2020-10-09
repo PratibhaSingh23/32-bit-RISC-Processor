@@ -1,1 +1,29 @@
-abcd
+
+module DATA_PATH(ALU_OUT, D1, D2, DATA_IN, INSTR, CLK, RST);
+input CLK, RST;
+output [31:0] ALU_OUT , D1, D2, DATA_IN, INSTR;
+wire [31:0] ADDR, PC_NXT, OUT_ADR1, INSTR, INSTR_XTND, D1, D2, DATA_IN, ALU_OUT, MMRY_OUT, SHFTD_DATA, OUT_ADR2, WB_DATA;
+wire [4:0] Rd;
+wire RegDst, ALUSrc, MemToReg, RegWr, MemRd, MemWr, Branch, PCSrc;
+wire [1:0] ALUop;
+wire [2:0] ALU_Ctrl;
+
+PC pc(ADDR, RST, CLK, PC_NXT);//OUT, RST, CLK, IN
+Adder adr1(OUT_ADR1, ADDR);//OUT, IN
+INSTRUCTION_MMRY im(INSTR, ADDR); //INSTR, ADDRESS
+CONTROL_UNIT cu(INSTR[31:26], RegDst, ALUSrc, MemToReg, RegWr, MemRd, MemWr, Branch, ALUop); //OPCode, RegDst, ALUSrc, MemToReg, RegWrite, RdMem, WrMem, Branch, ALUop
+MUX_5bit mux1(Rd, INSTR[20:16], INSTR[15:11], RegDst);//OUT, IN0, IN1, SEL
+REG_BANK rb(D1, DATA_IN, INSTR[25:21], INSTR[20:16], Rd, WB_DATA, CLK, RegWr);//read_data1, read_data2, read_reg1, read_reg2, write_reg, write_data, CLK, RegWrite
+SIGN_EXTND sx(INSTR_XTND, INSTR[15:0]);//OUT, IN
+MUX_32bit mux2(D2, DATA_IN, INSTR_XTND, ALUSrc);//OUT, IN0, IN1, SEL
+ALU_CNTRL ac(ALU_Ctrl, ALUop, INSTR[5:0]);//ALU_Ctrl, ALUop, FUNC ...(o/p, i/p, i/p)
+ALU alu(ALU_OUT, ZERO, D1, D2, ALU_Ctrl);//OUT, ZERO, IN1, IN2, ALUCtrl
+DATA_MMRY dm(MMRY_OUT, ALU_OUT, DATA_IN, MemRd, MemWr);//RD_DATA, ADDRESS, WR_DATA, RD_EN, WR_EN
+MUX_32bit mux3(WB_DATA, MMRY_OUT, ALU_OUT, MemToReg);//OUT, IN0, IN1, SEL
+SHIFT_LEFT sl(SHFTD_DATA, INSTR_XTND);//OUT, IN
+ADDDER2_INPUT adr2(OUT_ADR2, OUT_ADR1, SHFTD_DATA);
+MUX_32bit mux4(PC_NXT, OUT_ADR1, OUT_ADR2, PCSrc);//OUT, IN0, IN1, SEL
+and a1(PCSrc, ALUSrc, Branch);
+
+endmodule
+
