@@ -1,0 +1,21 @@
+module ALU(OUT, ZERO, IN1, IN2, ALUCtrl);
+input [31:0] IN1, IN2;
+input [2:0] ALUCtrl;
+output reg [31:0] OUT;
+output reg ZERO;
+always@(*)
+begin
+    case(ALUCtrl)
+    3'b000 : OUT = IN1 + IN2 ;
+    3'b001 : OUT = IN1 | IN2 ;
+    3'b010 : OUT = IN1 & IN2 ;
+    3'b110 : OUT = IN1 - IN2 ;
+    3'b111 : OUT = (IN1 < IN2) ? 1 : 0 ;
+    default : OUT = IN1 + IN2 ;
+    endcase
+    if(OUT==0)
+     ZERO = 1'b1;
+     else
+     ZERO = 1'b0;
+end
+endmodule
