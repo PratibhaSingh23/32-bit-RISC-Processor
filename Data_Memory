@@ -1,0 +1,27 @@
+module DATA_MMRY(RD_DATA, ADDRESS, WR_DATA, RD_EN, WR_EN);
+input [31:0] ADDRESS, WR_DATA;
+input RD_EN, WR_EN;
+output reg [31:0] RD_DATA;
+reg [31:0] MMRY [0:31];
+
+initial
+begin
+    MMRY[0] = 32'h0000_0000;
+    MMRY[1] = 32'h0000_0001;
+    MMRY[2] = 32'h0000_0002;
+    MMRY[3] = 32'h0000_0003;
+    MMRY[4] = 32'h0000_0004;
+    MMRY[5] = 32'h0000_0005;
+    MMRY[6] = 32'h0000_0006; 
+    MMRY[7] = 32'h0000_0007;
+    MMRY[8] = 32'h0000_0008;
+    MMRY[9] = 32'h0000_0009;
+    MMRY[10] = 32'h0000_000A;
+    MMRY[11] = 32'h0000_000B;
+    MMRY[12] = 32'h0000_000C;   
+end
+always@(RD_EN==1 && ADDRESS)
+    RD_DATA = MMRY[ADDRESS];
+always@(WR_EN==1 && ADDRESS)
+    MMRY[ADDRESS] = WR_DATA;
+endmodule
