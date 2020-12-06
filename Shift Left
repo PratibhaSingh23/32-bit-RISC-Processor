@@ -1,0 +1,5 @@
+module SHIFT_LEFT(OUT, IN);
+input [31:0] IN;
+output [31:0] OUT;
+assign OUT = {IN[29:0], 2'b00 } ;
+endmodule
