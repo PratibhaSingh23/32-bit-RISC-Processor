@@ -1,0 +1,5 @@
+module ADDDER2_INPUT(OUT, IN1, IN2);
+input [31:0] IN1, IN2;
+output [31:0] OUT;
+assign OUT = IN1 + IN2 ;
+endmodule
