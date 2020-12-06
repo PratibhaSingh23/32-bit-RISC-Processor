@@ -1,0 +1,13 @@
+
+module PC(OUT, RST, CLK, IN);
+input [31:0] IN;
+input CLK, RST;
+output reg [31:0] OUT;
+always@(posedge CLK, posedge RST)
+begin
+    if(RST)
+    OUT <= 32'd0;
+    else
+    OUT <= IN;
+end
+endmodule
