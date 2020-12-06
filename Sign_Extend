@@ -1,0 +1,7 @@
+module SIGN_EXTND(OUT, IN);
+output [31:0] OUT;
+input [15:0] IN;
+wire [31:16]padding;
+assign padding ={ 16{IN[15]} };
+assign OUT = {padding, IN };
+endmodule
