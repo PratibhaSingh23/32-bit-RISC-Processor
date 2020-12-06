@@ -1,0 +1,21 @@
+module REG_BANK(read_data1, read_data2, read_reg1, read_reg2, write_reg, write_data, CLK, RegWrite);
+input [4:0] read_reg1, read_reg2, write_reg;
+input [31:0] write_data;
+input CLK, RegWrite; // reg Enable pin
+output [31:0] read_data1, read_data2 ;
+reg [31:0] Register [0:31];
+initial
+begin
+ Register[0] = 32'h0400;
+ Register[1] = 32'h0501;
+ Register[2] = 32'h0210;
+ Register[3] = 32'h0701;
+end
+assign read_data1 = Register[read_reg1];
+assign read_data2 = Register[read_reg2];
+always@(posedge CLK)
+if(RegWrite==1)
+    //begin
+    Register[write_reg] = write_data;
+    //end
+endmodule
