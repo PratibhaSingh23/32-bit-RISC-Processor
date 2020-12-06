@@ -1,0 +1,10 @@
+module MUX_32bit(OUT, IN0, IN1, SEL);
+input [31:0] IN0, IN1;
+input SEL;
+output reg [31:0] OUT;
+always@(*)
+case(SEL)
+1'b0 : OUT <= IN0;
+1'b1 : OUT <= IN1;
+endcase
+endmodule
